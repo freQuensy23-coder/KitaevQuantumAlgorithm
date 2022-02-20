@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 i = complex(0, 1)
@@ -22,3 +23,15 @@ def polar_to_cart(phi, teta, mag=1) -> np.array:
     y: float = mag * np.sin(teta) * np.sin(phi)
     z: float = mag * np.cos(teta)
     return np.array([x, y, z], dtype=np.float64)
+
+
+def draw_sphere(ax, r):
+    u = np.linspace(0, np.pi, 30)
+    v = np.linspace(0, 2 * np.pi, 30)
+
+    x = r * np.outer(np.sin(u), np.sin(v))
+    y = r * np.outer(np.sin(u), np.cos(v))
+    z = r * np.outer(np.cos(u), np.ones_like(v))
+
+    ax.plot_wireframe(x, y, z, rstride=3, cstride=3)
+    return ax

@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from utils import i, rand_vec, randbin, polar_to_cart
+from utils import i, rand_vec, randbin, polar_to_cart, draw_sphere
 
 
 class Qubit:
@@ -25,10 +25,12 @@ class Qubit:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         x, y, z = polar_to_cart(phi=self._phi, teta=self._teta)
-        ax.quiver([0], [0], [0], [x], [y], [z])
-        ax.set_xlim([-1, 1]) # TODO Придумать куда это деть
+        ax.quiver([0], [0], [0], [x], [y], [z], color=["red"])
+        ax.set_xlim([-1, 1])  # TODO Придумать куда это деть
         ax.set_ylim([-1, 1])
         ax.set_zlim([-1, 1])
+        draw_sphere(ax, 1)
+        ax.scatter(x, y, z, c="red")
         return fig
 
     @property
