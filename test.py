@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from utils import rand_vec, randbin, adamar_gate, polar_to_cart
@@ -31,6 +32,9 @@ class TestQubit(TestCase):
         self.q.apply_gate(adamar_gate)
         self.assertAlmostEqual(self.q._alpha, a)
         self.assertAlmostEqual(self.q._beta, b)
+
+    def test_plot(self):
+        self.assertIsInstance(self.q.plot(), plt.Figure)
 
 
 class TestUtils(TestCase):
