@@ -2,8 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 i = complex(0, 1)
+h = 6.626070 * 10 ** (-34)
 not_gate = np.array([[0, 1], [1, 0]])
 adamar_gate = 1 / np.sqrt(2) * np.array([[1, 1], [1, -1]])
+
+
+def rotate_gate(phi):
+    return np.array([[1, 0], [0, np.e ** (i * phi)]])
 
 
 def rand_vec(dim: int, norm: float = 1) -> np.array:
@@ -35,3 +40,6 @@ def draw_sphere(ax, r):
 
     ax.plot_wireframe(x, y, z, rstride=3, cstride=3)
     return ax
+
+
+
