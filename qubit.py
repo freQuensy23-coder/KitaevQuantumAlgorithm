@@ -6,8 +6,12 @@ from utils import i, rand_vec, randbin, polar_to_cart, draw_sphere
 class Qubit:
     def __init__(self, **kwargs):
         a_real, a_complex, b_real, b_complex = rand_vec(dim=4)
-        self._alpha: complex = kwargs.get('a') or complex(a_real, a_complex)
-        self._beta: complex = kwargs.get('b') or complex(b_real, b_complex)
+        if 'a' in kwargs.keys():
+            self._alpha: complex = kwargs.get('a')
+            self._beta: complex = kwargs.get('b')
+        else:
+            self._alpha: complex = complex(a_real, a_complex)
+            self._beta: complex = complex(b_real, b_complex)
         self.measured: bool = False
         self.state = None
 
