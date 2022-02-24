@@ -21,8 +21,6 @@ class Qubit:
         return self.state
 
     def apply_gate(self, gate):
-        if self.measured:
-            raise QubitMeasured("This qubit is measured and you can't apply operator to it")
         self._matrix = gate.dot(self._matrix)
 
     def plot(self) -> plt.figure:
