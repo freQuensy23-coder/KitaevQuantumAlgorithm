@@ -33,6 +33,11 @@ class Qubit:
         ax.set_xlim([-1, 1])  # TODO Придумать куда это деть
         ax.set_ylim([-1, 1])
         ax.set_zlim([-1, 1])
+
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_zlabel("z")
+
         draw_sphere(ax, 1)
         ax.scatter(x, y, z, c="red")
         return fig
