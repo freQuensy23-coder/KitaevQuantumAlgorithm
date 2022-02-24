@@ -3,6 +3,7 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 import numpy as np
 
+from algorithms import Kitaev
 from flux_bias import FluxBiasController
 from utils import rand_vec, randbin, adamar_gate, polar_to_cart, h
 from qubit import Qubit
@@ -38,18 +39,18 @@ class TestQubit(TestCase):
         self.assertIsInstance(self.q.plot(), plt.Figure)
 
 
-class TestFluxBias(TestCase):
+class AlgorithmTest(TestCase):
     def setUp(self) -> None:
-        self.flux_bias = FluxBiasController(2.67, np.pi, mu=h)
+        self.alg = Kitaev((2.67, np.pi), mu=h)
 
     def test_time_work(self):
-        self.assertIsInstance(self.flux_bias.time(), float)
+        self.assertIsInstance(self.alg.time(), float)
 
     def test_time_correct(self):
-        self.assertAlmostEqual(self.flux_bias.time(), 5.88235294118, places=2)
+        self.assertAlmostEqual(self.alg.time(), 5.88235294118, places=2)
 
-        zero_flux_bias = FluxBiasController(0, 7, mu=h)
-        self.assertAlmostEqual(zero_flux_bias.time(), 0.45, places=2)
+        alg_zero = Kitaev((0, 7), mu=h)  # f_min = 0
+        self.assertAlmostEqual(alg_zero.time(), 0.45, places=2)
 
 
 
