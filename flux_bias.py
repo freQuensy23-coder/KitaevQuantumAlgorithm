@@ -17,8 +17,10 @@ class FluxBiasController:
         else:
             self.field = 0
         self.m = mu / h
+        self.total_time = 0
 
     def apply_field(self, qubit, time=None):
+        self.total_time += time
         phi = self.m * self.field * time
         qubit.apply_gate(rotate_gate(phi=phi))
         return locals()
