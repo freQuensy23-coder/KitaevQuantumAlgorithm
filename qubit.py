@@ -62,5 +62,10 @@ class Qubit:
     def _matrix(self, matrix: np.array):
         self._alpha, self._beta = matrix
 
+    @property
+    def _probability(self):
+        """:return int from 0 to 1 - probability of measuring zero"""
+        return abs(self._alpha) ** 2
+
 
 class QubitMeasured(Exception): pass
