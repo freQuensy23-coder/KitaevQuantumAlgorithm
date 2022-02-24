@@ -2,15 +2,19 @@
 import numpy as np
 from numpy import pi
 
-from utils import h, i, rotate_gate, default_mu
+from flux_bias import FluxBiasController
+from qubit import Qubit
+from utils import h, i, rotate_gate, default_mu, adamar_gate
 from random import uniform
 
 
-class Kitaev:
-    def __init__(self, field_range: tuple, mu=default_mu):
+class Algorith:
+    def __init__(self, field_range: tuple, mu=default_mu, N=100):
         f_min, f_max = field_range
+        self.N = N
         self.m = mu / h
         self.f_min, self.f_max = f_min, f_max
+        self.field_manger = FluxBiasController(f_min, f_max)
 
     def time(self) -> float:
         """Calculate optimum measurements time"""
@@ -30,3 +34,21 @@ class Kitaev:
                     raise ValueError("Unable to find optimal time")
         if self.f_min == 0:
             return np.pi / self.f_max
+
+    def do_measurements(self) -> dict:
+        measurements = []
+        for k in range(self.N):
+            q = Qubit(a=1 + 0 * i, b=0 + 0 * i)  #
+            q.apply_gate(adamar_gate)
+
+            time = self.time()
+            self.field_manger.apply_field(q, time=time)
+
+            q.apply_gate(adamar_gate)
+            measurements.append(q.measure())
+
+        measurements = np.bincount(measurements)  # Count quantity of |0> and |1> result
+        if len(measurements) == 1:
+            return {0: measurements[0], 1: 0}
+        return {0: measurements[0], 1: measurements[1]}
+
