@@ -39,7 +39,7 @@ class TestQubit(TestCase):
         self.assertIsInstance(self.q.plot(), plt.Figure)
 
 
-class AlgorithmTest(TestCase):
+class TestAlgorithm(TestCase):
     def setUp(self) -> None:
         self.alg = Kitaev((2.67, np.pi), mu=h)
 
@@ -52,7 +52,23 @@ class AlgorithmTest(TestCase):
         alg_zero = Kitaev((0, 7), mu=h)  # f_min = 0
         self.assertAlmostEqual(alg_zero.time(), 0.45, places=2)
 
-
+#
+# class TestMeasure(TestCase):
+#     def setUp(self) -> None:
+#         real_field = 7.8
+#         field_range = (0, 10)
+#         self
+#         self.field = FluxBiasController(field=real_field)
+#
+#     def test_zero(self):
+#         for i in range(10000):
+#             q = Qubit(a=1 + 0 * i, b=0 + 0 * i)  #
+#             q.apply_gate(adamar_gate)
+#
+#             time = self.time()
+#             self.field_manger.apply_field(q, time=time)
+#
+#             q.apply_gate(adamar_gate)
 
 class TestUtils(TestCase):
     def test_rand_vec(self):

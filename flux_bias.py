@@ -8,6 +8,8 @@ from random import uniform
 class FluxBiasController:
     """This class knows real field value and can apply it to qbits"""
     def __init__(self, mu=default_mu, field=None, field_range: tuple = None):
+        # TODO вместо mu использовать отношение к постоянной планка
+        # TODO create tests
         if field is None and field_range is None:
             raise ValueError("Flux Controller needs field value or field range.")
         if field_range is not None:
