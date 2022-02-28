@@ -3,7 +3,7 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 import numpy as np
 
-from algorithms import Kitaev
+from algorithms import Kitaev, Fourier
 from flux_bias import FluxBiasController
 from utils import rand_vec, randbin, adamar_gate, polar_to_cart, h
 from qubit import Qubit
@@ -41,34 +41,26 @@ class TestQubit(TestCase):
 
 class TestAlgorithm(TestCase):
     def setUp(self) -> None:
-        self.alg = Kitaev((2.67, np.pi), mu=h)
+        self.alg = Kitaev(field_range=(2.67, np.pi), mu=h)  # mu = h => self.m = mu/h = 1
 
     def test_time_work(self):
-        self.assertIsInstance(self.alg.time(), float)
+        self.assertIsInstance(self.alg.time, float)
 
     def test_time_correct(self):
-        self.assertAlmostEqual(self.alg.time(), 5.88235294118, places=2)
+        self.assertAlmostEqual(self.alg.time, 5.0, places=2)
 
         alg_zero = Kitaev((0, 7), mu=h)  # f_min = 0
-        self.assertAlmostEqual(alg_zero.time(), 0.45, places=2)
+        self.assertAlmostEqual(alg_zero.time, 0.45, places=2)
 
-#
-# class TestMeasure(TestCase):
-#     def setUp(self) -> None:
-#         real_field = 7.8
-#         field_range = (0, 10)
-#         self
-#         self.field = FluxBiasController(field=real_field)
-#
-#     def test_zero(self):
-#         for i in range(10000):
-#             q = Qubit(a=1 + 0 * i, b=0 + 0 * i)  #
-#             q.apply_gate(adamar_gate)
-#
-#             time = self.time()
-#             self.field_manger.apply_field(q, time=time)
-#
-#             q.apply_gate(adamar_gate)
+        alg = Kitaev((11, 13), mu=h)  # f_min = 0
+        self.assertAlmostEqual(alg.time, 1.21, places=2)
+
+        alg = Kitaev((13.7, 16.5), mu=31 * h)  # f_min = 0
+        self.assertAlmostEqual(alg.time, 	0.031, places=2)
+
+        alg = Kitaev((21, 22), mu=31 * h)  # f_min = 0
+        self.assertAlmostEqual(alg.time, 0.0967352576619, places=2)
+
 
 class TestUtils(TestCase):
     def test_rand_vec(self):
@@ -88,3 +80,26 @@ class TestUtils(TestCase):
         for i in range(3):
             self.assertAlmostEqual(polar_to_cart(teta=np.pi / 4, phi=0)[i],
                                    np.array([np.sqrt(2) / 2, 0, np.sqrt(2) / 2])[i])
+
+
+class TestFourier(TestCase):
+    def setUp(self) -> None:
+        self.alg0 = Fourier(field_range=(0, 100))
+        self.alg = Fourier(field_range=(80, 100))
+
+    def test_prob0(self):
+        self.assertEqual(self.alg0.probability[0](0), 1)
+        self.assertAlmostEqual(self.alg0.probability[0](50), 0.5)
+
+    def test_prob(self):
+        self.assertAlmostEqual(self.alg.probability[0](100), 0)
+
+        f_min, f_max = field_range = (75, 100)
+        alg2 = Fourier(field_range=field_range)
+        data = []
+        for i in np.linspace(f_min, f_max, 15):
+            pr = alg2.probability[0](i)
+            print(pr)
+            data.append(pr)
+        plt.plot(np.linspace(f_min, f_max, 15), data)
+        plt.show()

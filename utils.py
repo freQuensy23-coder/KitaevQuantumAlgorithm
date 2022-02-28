@@ -6,6 +6,7 @@ h = 6.626070 * 10 ** (-34)
 default_mu = 927 * 10 ** (-26)
 not_gate = np.array([[0, 1], [1, 0]])
 adamar_gate = 1 / np.sqrt(2) * np.array([[1, 1], [1, -1]])
+truth_accuracy = 1000  # TODO Smart accuracy selector
 
 
 def rotate_gate(phi):
@@ -41,6 +42,5 @@ def draw_sphere(ax, r):
 
     ax.plot_wireframe(x, y, z, rstride=3, cstride=3)
     return ax
-
 
 
