@@ -74,9 +74,9 @@ class Fourier(AbstractAlgorithm):
         if (forces is not None and truth_0 is None) or (forces is None and truth_0 is not None):
             raise Exception("You cannot pass truth_0 and forces separately to this __init__ method")
         super().__init__(*args, **kwargs)
-        self.forces = np.linspace(self.f_min, self.f_max)
+        self.forces = np.linspace(self.f_min, self.f_max, truth_accuracy)
         self.truth = truth_0 or np.array(truth_accuracy * [1 / (self.f_max - self.f_min)])
-
+        self.f_min0, self.f_max0 = self.f_min, self.f_max
     @property
     def probability(self) -> tuple:
         """Get probability  functions (Field -> [0,1]) for |0> and |1> state of single measure"""
@@ -87,6 +87,7 @@ class Fourier(AbstractAlgorithm):
             measurements = self.do_measurements()
             most_popular_state = max(measurements, key=measurements.get)  # | 0 > or | 1 >
             self.update_truth(prob_func=self.probability[most_popular_state])
+            self.f_min, self.f_max = self.get_new_range()
 
     def get_truth(self, f) -> float:
         """Real probability of f field
@@ -105,11 +106,18 @@ class Fourier(AbstractAlgorithm):
     def draw_truth(self):
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        x = np.linspace(self.f_min, self.f_max, truth_accuracy)
+        x = np.linspace(self.f_min0, self.f_max0, len(self.truth))
         ax.plot(x, self.truth)
         ax.set_xlabel("f")
         ax.set_ylabel("P(f)")
+        ax.plot([self.field_manger.field]*2, [0, max(self.truth)], c="red")
         return fig
 
     def get_new_range(self):
-        pass
+        level = 1/np.sqrt(2) * max(self.truth)
+        delta = self.truth - level
+        s = np.sign(delta)
+        points = np.where(s > 0)[0]
+        l, r = points[0], points[-1] # left and right border of the gap indexes
+        f_min, f_max = self.forces[l], self.forces[r]
+        return f_min, f_max
