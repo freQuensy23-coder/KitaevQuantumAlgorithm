@@ -57,6 +57,7 @@ class AbstractAlgorithm:
 
 
 class Kitaev(AbstractAlgorithm):
+    """Kitaev dividing each interval into two parts"""
     def work(self):
         for k in range(self.iters):
             measurements = self.do_measurements()
@@ -69,7 +70,8 @@ class Kitaev(AbstractAlgorithm):
         return self.f_min, self.f_max
 
 
-class Fourier(AbstractAlgorithm):
+class KitaevTruthScaling(AbstractAlgorithm):
+    """Kitaev algorythm with truth function"""
     def __init__(self, *args, truth_0: np.array = None, forces: np.array = None, **kwargs):
         if (forces is not None and truth_0 is None) or (forces is None and truth_0 is not None):
             raise Exception("You cannot pass truth_0 and forces separately to this __init__ method")
