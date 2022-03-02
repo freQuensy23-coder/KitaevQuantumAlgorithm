@@ -3,7 +3,7 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 import numpy as np
 
-from algorithms import Kitaev, Fourier
+from algorithms import Kitaev, KitaevTruthScaling
 from flux_bias import FluxBiasController
 from utils import rand_vec, randbin, adamar_gate, polar_to_cart, h
 from qubit import Qubit
@@ -82,10 +82,10 @@ class TestUtils(TestCase):
                                    np.array([np.sqrt(2) / 2, 0, np.sqrt(2) / 2])[i])
 
 
-class TestFourier(TestCase):
+class TestKitaevTruth(TestCase):
     def setUp(self) -> None:
-        self.alg0 = Fourier(field_range=(0, 100))
-        self.alg = Fourier(field_range=(80, 100))
+        self.alg0 = KitaevTruthScaling(field_range=(0, 100))
+        self.alg = KitaevTruthScaling(field_range=(80, 100))
 
     def test_prob0(self):
         self.assertEqual(self.alg0.probability[0](0), 1)
@@ -95,7 +95,7 @@ class TestFourier(TestCase):
         self.assertAlmostEqual(self.alg.probability[0](100), 0)
 
         f_min, f_max = field_range = (75, 100)
-        alg2 = Fourier(field_range=field_range)
+        alg2 = KitaevTruthScaling(field_range=field_range)
         data = []
         for i in np.linspace(f_min, f_max, 15):
             pr = alg2.probability[0](i)
