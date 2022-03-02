@@ -6,7 +6,7 @@ from algorithms import KitaevTruthScaling, Kitaev
 field_range = (f_min, f_max) = (75, 100)
 N = 10
 
-alg = Fourier(field_range=field_range, measurements_iterations=1) # TODO убрать measurments iterations в метод work
+alg = KitaevTruthScaling(field_range=field_range, measurements_iterations=1) # TODO убрать measurments iterations в метод work
 dfs = np.zeros(N)
 times = np.zeros(N)
 for i in range(N):
